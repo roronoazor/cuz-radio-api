@@ -57,6 +57,8 @@ The API will be available at `http://localhost:8000` by default.
 
 ## API Documentation
 
+Postman Documentation Link: [https://documenter.getpostman.com/view/8282612/2sA3rwNuxh](https://documenter.getpostman.com/view/8282612/2sA3rwNuxh)
+
 ### Authentication Endpoints
 
 - `POST /auth/signup` - Create a new user account

@@ -1,73 +1,110 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# CuzRadio Inventory API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project is a NestJS-based API for a simple inventory platform with role-based access control. It includes functionality for admin, primary, and secondary users to manage items in their respective stores.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Technologies Used
 
-## Description
+- **NestJS**: A progressive Node.js framework for building efficient, reliable and scalable server-side applications.
+- **Node.js**: The runtime environment for executing JavaScript code server-side.
+- **Prisma**: Next-generation ORM for Node.js and TypeScript.
+- **SQLite**: A C-language library that implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+SQLite was chosen as the database because it's a file-based database that doesn't require installation of additional dependencies. This means that with just Node.js and npm, you can run this application without setting up a separate database server.
+
+## Prerequisites
+
+Before you begin, ensure you have met the following requirements:
+
+- Node.js (v16 or later)
+- npm (v6 or later)
 
 ## Installation
 
-```bash
-$ npm install
+1. Clone the repository:
+
+   ```
+   git clone https://github.com/roronoazor/cuz-radio-api.git
+   cd cuz-radio-api
+   ```
+
+2. Install dependencies:
+
+   ```
+   npm install
+   ```
+
+3. Set up your environment variables:
+
+   - Copy the `.env.example` file to `.env`
+   - Update the `.env` file with your JWT secret and other necessary configurations
+   - For convenience my local `.env` has been pushed to this repo for your use
+
+4. Set up the database:
+   ```
+   npx prisma migrate dev
+   ```
+   This will create the SQLite database file and run the migrations.
+
+## Running the Application
+
+To run the application in development mode:
+
+```
+npm run start:dev
 ```
 
-## Running the app
+The API will be available at `http://localhost:8000` by default.
 
-```bash
-# development
-$ npm run start
+## API Documentation
 
-# watch mode
-$ npm run start:dev
+### Authentication Endpoints
 
-# production mode
-$ npm run start:prod
-```
+- `POST /auth/signup` - Create a new user account
+  - During signup, users can select their role: ADMIN, PRIMARY, or SECONDARY
+- `POST /auth/login` - Login and receive a JWT token
 
-## Test
+### Access Rules
 
-```bash
-# unit tests
-$ npm run test
+- **Admin users** can access all routes (admin_store, primary_store, secondary_store)
+- **Primary users** can only access primary_store routes
+- **Secondary users** can only access secondary_store routes
 
-# e2e tests
-$ npm run test:e2e
+### Admin Store Endpoints
 
-# test coverage
-$ npm run test:cov
-```
+- `POST /admin_store/items` - Create a new item
+- `GET /admin_store/items` - Get all items (paginated)
+- `GET /admin_store/items/:id` - Get a specific item
+- `PUT /admin_store/items/:id` - Update an item
+- `DELETE /admin_store/items/:id` - Delete an item
 
-## Support
+### Primary Store Endpoints
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- `POST /primary_store/items` - Create a new item
+- `GET /primary_store/items` - Get all items (paginated)
+- `GET /primary_store/items/:id` - Get a specific item
+- `PUT /primary_store/items/:id` - Update an item
+- `DELETE /primary_store/items/:id` - Delete an item
 
-## Stay in touch
+### Secondary Store Endpoints
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- `POST /secondary_store/items` - Create a new item
+- `GET /secondary_store/items` - Get all items (paginated)
+- `GET /secondary_store/items/:id` - Get a specific item
+- `PUT /secondary_store/items/:id` - Update an item
+- `DELETE /secondary_store/items/:id` - Delete an item
 
-## License
+## User Roles and Access
 
-Nest is [MIT licensed](LICENSE).
+When signing up, users can choose their role:
+
+1. **ADMIN**: Has full access to all routes and can perform any operation.
+2. **PRIMARY**: Can only access and perform operations on the primary_store routes.
+3. **SECONDARY**: Can only access and perform operations on the secondary_store routes.
+
+The role chosen during signup determines which API endpoints the user can access and use. This role-based access control ensures that users only interact with the parts of the system they're authorized to use.
+
+## Contact
+
+Name - ugoodumegwu@gmail.com
+
+Project Link: [https://github.com/roronoazor/cuz-radio-api.git](https://github.com/roronoazor/cuz-radio-api.git)

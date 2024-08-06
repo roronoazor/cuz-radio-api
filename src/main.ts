@@ -11,17 +11,19 @@ async function bootstrap() {
   // use of helmet to prevent xss attacks
   app.use(helmet()); 
 
-  // TODO: in production refine the cors access control
+  // CORS configuration
   app.use(
     cors({
-      origin: 'http://localhost:3000',
+      origin: [
+        'http://localhost:3000',
+        'https://cuz-radio-frontend.netlify.app'
+      ],
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
       credentials: true,
     }),
   );
 
   app.useGlobalPipes(new ValidationPipe());
-
 
   const config = new DocumentBuilder()
     .setTitle('Cuz Radio API')
@@ -31,7 +33,8 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  const port = process.env.PORT || 8000
+
+  const port = process.env.PORT || 8000;
   await app.listen(port);
 }
 bootstrap();
